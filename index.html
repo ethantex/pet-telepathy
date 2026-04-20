@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>量子寵物溝通器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-indigo-50 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full text-center">
+        <h1 class="text-2xl font-bold text-indigo-600 mb-2">🐾 量子寵物溝通器</h1>
+        <p class="text-gray-500 text-sm mb-6">透過頻率共振，解讀毛孩內心的深層訊息</p>
+
+        <div class="mb-4">
+            <label class="block mb-2 text-sm font-medium text-gray-700">上傳寵物聖像</label>
+            <input type="file" id="photoInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"/>
+        </div>
+
+        <textarea id="questionInput" placeholder="你想問他什麼？" class="w-full p-3 border border-gray-200 rounded-lg mb-4 focus:ring-2 focus:ring-indigo-400 outline-none"></textarea>
+
+        <button onclick="startCommunication()" id="actionBtn" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition">
+            開始連結心靈
+        </button>
+
+        <div id="loading" class="hidden mt-6 italic text-indigo-500 animate-pulse">正在調頻中...</div>
+        <div id="result" class="hidden mt-6 p-4 bg-indigo-50 border-l-4 border-indigo-500 text-left">
+            <p class="font-bold text-indigo-800 mb-1">毛孩的低語：</p>
+            <p id="responseText" class="text-gray-700 leading-relaxed"></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

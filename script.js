@@ -50,7 +50,7 @@ function startCommunication() {
     const question = document.getElementById('questionInput').value;
 
     if (!photo || !question) {
-        alert("請先上傳照片並輸入問題，靈魂才能對接！");
+        alert("請先上傳寵物圖像並輸入問題，才可進行量子糾纏連結！");
         return;
     }
 

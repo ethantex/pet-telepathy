@@ -3,31 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>量子寵物溝通器</title>
+    <title>AI寵物意識溝通器</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 客製化酷炫背景與動效 */
+        body {
+            background: radial-gradient(circle at center, #1a1a2e 0%, #020207 100%);
+            overflow-x: hidden;
+        }
+        /* 星空背景微動效 */
+        .stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(white 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3; animation: starMove 100s linear infinite;
+            z-index: -1;
+        }
+        @keyframes starMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
+        
+        /* 毛玻璃效果與霓虹外框 */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(123, 31, 162, 0.3);
+        }
+        /* 霓虹按鈕 */
+        .neon-btn {
+            background: linear-gradient(45deg, #ff00cc, #3333ff);
+            box-shadow: 0 0 15px rgba(255, 0, 204, 0.5);
+            transition: all 0.3s ease;
+        }
+        .neon-btn:hover:not(:disabled) {
+            box-shadow: 0 0 25px rgba(51, 51, 255, 0.8);
+            transform: scale(1.02);
+        }
+        .neon-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        /* 圖片預覽框 */
+        #photoPreview {
+            max-width: 150px; max-height: 150px;
+            border-radius: 50%; object-fit: cover;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            display: none; margin: 0 auto 1rem auto;
+        }
+    </style>
 </head>
-<body class="bg-indigo-50 min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full text-center">
-        <h1 class="text-2xl font-bold text-indigo-600 mb-2">🐾 量子寵物溝通器</h1>
-        <p class="text-gray-500 text-sm mb-6">透過頻率共振，解讀毛孩內心的深層訊息</p>
+<body class="min-h-screen flex items-center justify-center p-4 text-gray-200 antialiased font-mono">
+    <div class="stars"></div>
+    
+    <div class="glass-panel p-8 rounded-3xl max-w-lg w-full text-center relative overflow-hidden">
+        <div class="absolute -top-10 -left-10 w-32 h-32 bg-purple-500 rounded-full blur-[50px] opacity-30"></div>
+        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-500 rounded-full blur-[50px] opacity-30"></div>
 
-        <div class="mb-4">
-            <label class="block mb-2 text-sm font-medium text-gray-700">上傳寵物聖像</label>
-            <input type="file" id="photoInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"/>
+        <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-purple-400 to-pink-300 mb-2 tracking-widest">
+            AI Pet Telepathy Interface
+        </h1>
+        <p class="text-xs text-cyan-200 opacity-80 mb-8 tracking-wider">AI寵物意識溝通器 v1.0 • 量子糾纏態調頻</p>
+
+        <div class="mb-6 relative z-10">
+            <img id="photoPreview" src="" alt="寵物圖像預覽">
+            <label class="block text-sm font-medium text-purple-200 mb-2">上傳寵物圖像</label>
+            <input type="file" id="photoInput" accept="image/*" onchange="previewImage(this)" class="block w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-cyan-300 hover:file:bg-gray-700 cursor-pointer"/>
         </div>
 
-        <textarea id="questionInput" placeholder="你想問他什麼？" class="w-full p-3 border border-gray-200 rounded-lg mb-4 focus:ring-2 focus:ring-indigo-400 outline-none"></textarea>
+        <div class="mb-6 relative z-10">
+            <label class="block text-sm font-medium text-purple-200 mb-2">向宇宙投射靈魂探詢</label>
+            <textarea id="questionInput" placeholder="在此輸入你的問題..." class="w-full p-4 bg-gray-900/50 border border-gray-700 rounded-xl mb-4 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition text-gray-100 placeholder:text-gray-600 resize-none h-24 text-sm"></textarea>
+        </div>
 
-        <button onclick="startCommunication()" id="actionBtn" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition">
-            開始連結心靈
+        <button onclick="startCommunication()" id="actionBtn" class="neon-btn w-full text-white py-4 rounded-xl font-bold tracking-widest text-sm relative z-10">
+            啟動量子糾纏連結
         </button>
 
-        <div id="loading" class="hidden mt-6 italic text-indigo-500 animate-pulse">正在調頻中...</div>
-        <div id="result" class="hidden mt-6 p-4 bg-indigo-50 border-l-4 border-indigo-500 text-left">
-            <p class="font-bold text-indigo-800 mb-1">毛孩的低語：</p>
-            <p id="responseText" class="text-gray-700 leading-relaxed"></p>
+        <div id="loading" class="hidden mt-10 text-cyan-300 animate-pulse text-sm relative z-10 tracking-widest">
+            [系統訊息] 正在演算量子糾纏態，透過AI大數據調頻中...
         </div>
+        
+        <div id="result" class="hidden mt-10 p-6 bg-black/30 border border-cyan-800 rounded-2xl text-left relative z-10">
+            <div class="absolute inset-0 bg-cyan-950/20 rounded-2xl blur-sm"></div>
+            <div class="relative">
+                <p class="font-bold text-cyan-200 mb-3 tracking-wider text-sm">[量子意識回饋]</p>
+                <p id="responseText" class="text-gray-100 leading-relaxed text-sm"></p>
+                <div class="mt-4 text-center">
+                    <span class="text-[10px] text-gray-600">共振頻率：<span id="randomFreq"></span> PHz</span>
+                </div>
+            </div>
+        </div>
+        
+        <p class="mt-10 text-[10px] text-gray-700 tracking-tighter">此裝置為實驗性量子靈魂探測器，僅供參考。若有雷同，純屬緣分。</p>
     </div>
+
     <script src="script.js"></script>
+    <script>
+        // 圖片預覽功能
+        function previewImage(input) {
+            const preview = document.getElementById('photoPreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.src = "";
+                preview.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>

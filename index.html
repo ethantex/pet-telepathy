@@ -3,119 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI寵物意識溝通器</title>
+    <title>AI 寵物意識溝通器 | 量子解碼</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 深邃宇宙底色 */
-        body {
-            background: #020207;
-            overflow-x: hidden;
-            margin: 0;
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background-color: #050508; /* 極深宇宙底色 */
         }
 
-        /* 宇宙星雲感：利用兩個巨大的漸層營造色彩深度 */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(123, 31, 162, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(33, 150, 243, 0.15) 0%, transparent 50%);
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        /* 星空容器：透過 JS 注入 box-shadow */
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 1.5px;
-            height: 1.5px;
-            background: transparent;
+        /* 畫布定位 */
+        #starCanvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
-            opacity: 0.8;
         }
 
-        /* 毛玻璃效果與霓虹外框 */
+        /* 宇宙深處的星雲霧氣 */
+        .nebula {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(63, 0, 113, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 70% 80%, rgba(0, 70, 120, 0.15) 0%, transparent 40%);
+            z-index: -2;
+            filter: blur(50px);
+        }
+
+        /* 毛玻璃面板升級 */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(10, 10, 20, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
         }
 
-        /* 霓虹按鈕 */
         .neon-btn {
             background: linear-gradient(45deg, #ff00cc, #3333ff);
-            box-shadow: 0 0 15px rgba(255, 0, 204, 0.4);
+            box-shadow: 0 0 20px rgba(255, 0, 204, 0.3);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .neon-btn:hover:not(:disabled) {
-            box-shadow: 0 0 30px rgba(51, 51, 255, 0.7);
-            transform: scale(1.03);
+            box-shadow: 0 0 35px rgba(51, 51, 255, 0.6);
+            transform: scale(1.02) translateY(-2px);
         }
-        .neon-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* 圖片預覽框 */
         #photoPreview {
-            max-width: 150px;
-            max-height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
+            max-width: 140px; max-height: 140px;
+            border-radius: 50%; object-fit: cover;
             border: 2px solid #00ffff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
-            display: none;
-            margin: 0 auto 1.5rem auto;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+            display: none; margin: 0 auto 1.5rem auto;
         }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 text-gray-200 antialiased font-mono">
-    <div class="stars"></div>
     
-    <div class="glass-panel p-8 rounded-3xl max-w-lg w-full text-center relative overflow-hidden">
-        <div class="absolute -top-10 -left-10 w-40 h-40 bg-purple-600 rounded-full blur-[80px] opacity-20"></div>
-        <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-600 rounded-full blur-[80px] opacity-20"></div>
-
-        <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-purple-400 to-pink-300 mb-2 tracking-widest">
-            AI Pet Telepathy Interface
+    <canvas id="starCanvas"></canvas>
+    <div class="nebula"></div>
+    
+    <div class="glass-panel p-10 rounded-[2rem] max-w-lg w-full text-center relative overflow-hidden">
+        <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-purple-400 to-pink-300 mb-2 tracking-widest uppercase">
+            AI PET TELEPATHY INTERFACE
         </h1>
-        <p class="text-xs text-cyan-200 opacity-80 mb-8 tracking-wider">AI寵物意識溝通器 v1.1 • 量子糾纏態調頻</p>
+        <p class="text-[10px] text-cyan-300 opacity-60 mb-8 tracking-[0.2em]">AI寵物意識溝通器 v1.2 • 量子糾纏態調頻</p>
 
         <div class="mb-6 relative z-10">
             <img id="photoPreview" src="" alt="寵物圖像預覽">
-            <label class="block text-sm font-medium text-purple-200 mb-2">上傳寵物圖像</label>
-            <input type="file" id="photoInput" accept="image/*" onchange="previewImage(this)" class="block w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-cyan-300 hover:file:bg-gray-700 cursor-pointer"/>
+            <label class="block text-xs font-bold text-purple-300 mb-2 uppercase tracking-tighter">上傳寵物圖像</label>
+            <input type="file" id="photoInput" accept="image/*" onchange="previewImage(this)" class="block w-full text-[10px] text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-gray-800 file:text-cyan-400 hover:file:bg-gray-700 cursor-pointer"/>
         </div>
 
-        <div class="mb-6 relative z-10">
-            <label class="block text-sm font-medium text-purple-200 mb-2">向宇宙投射靈魂探詢</label>
-            <textarea id="questionInput" placeholder="在此輸入你的問題..." class="w-full p-4 bg-gray-900/50 border border-gray-700 rounded-xl mb-4 focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition text-gray-100 placeholder:text-gray-600 resize-none h-24 text-sm"></textarea>
+        <div class="mb-6 relative z-10 text-left">
+            <label class="block text-xs font-bold text-purple-300 mb-2 uppercase tracking-tighter ml-1">向宇宙投射靈魂探詢</label>
+            <textarea id="questionInput" placeholder="在此輸入你的問題..." class="w-full p-4 bg-black/40 border border-white/10 rounded-2xl mb-4 focus:ring-1 focus:ring-cyan-500/50 outline-none transition text-sm h-28 placeholder:text-gray-700"></textarea>
         </div>
 
-        <button onclick="startCommunication()" id="actionBtn" class="neon-btn w-full text-white py-4 rounded-xl font-bold tracking-widest text-sm relative z-10">
+        <button onclick="startCommunication()" id="actionBtn" class="neon-btn w-full text-white py-4 rounded-2xl font-black tracking-widest text-xs uppercase relative z-10">
             啟動量子糾纏連結
         </button>
 
-        <div id="loading" class="hidden mt-10 text-cyan-300 animate-pulse text-sm relative z-10 tracking-widest">
-            [系統訊息] 正在演算量子糾纏態，透過AI大數據調頻中...
+        <div id="loading" class="hidden mt-10 text-cyan-400 animate-pulse text-[10px] tracking-widest">
+            [系統訊息] 正在演算量子糾纏態，透過 AI 大數據調頻中...
         </div>
         
-        <div id="result" class="hidden mt-10 p-6 bg-black/40 border border-cyan-900/50 rounded-2xl text-left relative z-10">
-            <div class="relative">
-                <p class="font-bold text-cyan-200 mb-3 tracking-wider text-sm">[量子意識回饋]</p>
-                <p id="responseText" class="text-gray-100 leading-relaxed text-sm whitespace-pre-line"></p>
-                <div class="mt-4 text-center border-t border-gray-800 pt-3">
-                    <span class="text-[10px] text-gray-500 font-mono italic">共振頻率：<span id="randomFreq" class="text-cyan-600"></span> PHz</span>
-                </div>
+        <div id="result" class="hidden mt-8 p-6 bg-white/5 border border-white/10 rounded-2xl text-left relative z-10">
+            <p class="font-bold text-cyan-300 mb-3 text-[10px] tracking-widest">[量子意識回饋]</p>
+            <p id="responseText" class="text-gray-100 text-sm leading-loose italic"></p>
+            <div class="mt-4 flex justify-between items-center opacity-30 text-[9px]">
+                <span>連結完整度: 98.42%</span>
+                <span>共振頻率: <span id="randomFreq"></span> PHz</span>
             </div>
         </div>
         
-        <p class="mt-10 text-[10px] text-gray-700 tracking-tighter">此裝置為實驗性量子靈魂探測器，僅供參考。若有雷同，純屬緣分。</p>
+        <p class="mt-10 text-[9px] text-gray-600 tracking-widest leading-relaxed">
+            此介面為實驗性裝置。內容源於量子隨機共振。
+        </p>
     </div>
 
     <script src="script.js"></script>
@@ -124,14 +109,11 @@
             const preview = document.getElementById('photoPreview');
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = e => {
                     preview.src = e.target.result;
                     preview.style.display = 'block';
-                }
+                };
                 reader.readAsDataURL(input.files[0]);
-            } else {
-                preview.src = "";
-                preview.style.display = 'none';
             }
         }
     </script>

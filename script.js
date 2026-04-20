@@ -45,45 +45,68 @@ const sentencePool = {
     ]
 };
 
-// --- 星空隨機產生器 ---
-function initCosmos() {
-    const starsContainer = document.querySelector('.stars');
-    const starCount = 300; // 產生 300 顆星星
-    let shadowCSS = "";
+/// --- 極致星空 Canvas 引擎 ---
+const canvas = document.getElementById('starCanvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
 
-    for (let i = 0; i < starCount; i++) {
-        const x = Math.floor(Math.random() * 100);
-        const y = Math.floor(Math.random() * 100);
-        const opacity = (Math.random() * 0.8 + 0.2).toFixed(2);
-        const size = (Math.random() * 1.5).toFixed(1); // 隨機大小感
-
-        shadowCSS += `${x}vw ${y}vh ${size}px rgba(255, 255, 255, ${opacity})`;
-        if (i < starCount - 1) shadowCSS += ", ";
+function initStarfield() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    stars = [];
+    // 產生 400 顆隨機星星
+    for (let i = 0; i < 400; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 1.5,
+            opacity: Math.random(),
+            speed: Math.random() * 0.05 // 極慢的移動感
+        });
     }
-
-    starsContainer.style.boxShadow = shadowCSS;
 }
 
-// 啟動通訊邏輯
+function animateStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(star => {
+        ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 緩慢移動與閃爍
+        star.y -= star.speed;
+        if (star.y < 0) star.y = canvas.height;
+        star.opacity += (Math.random() - 0.5) * 0.02;
+        if (star.opacity < 0.1) star.opacity = 0.1;
+        if (star.opacity > 1) star.opacity = 1;
+    });
+    requestAnimationFrame(animateStars);
+}
+
+// 初始化畫布
+window.addEventListener('resize', initStarfield);
+initStarfield();
+animateStars();
+
+// --- 溝通邏輯 ---
 function startCommunication() {
     const photo = document.getElementById('photoInput').files[0];
     const question = document.getElementById('questionInput').value;
 
     if (!photo || !question.trim()) {
-        alert("請先上傳寵物圖像並輸入問題，才可進行量子糾纏連結！");
+        alert("🚨 提醒：請先上傳寵物圖像並輸入探詢問題。");
         return;
     }
 
-    // 進入載入狀態
-    document.getElementById('actionBtn').disabled = true;
+    const btn = document.getElementById('actionBtn');
+    btn.disabled = true;
+    btn.innerText = "調頻中...";
     document.getElementById('result').classList.add('hidden');
     document.getElementById('loading').classList.remove('hidden');
 
-    // 模擬 AI 運算與量子調頻
     setTimeout(() => {
-        const getRand = (arr) => arr[Math.floor(Math.random() * arr.length)];
-        
-        // 組合內容並加上換行，增加閱讀質感
+        const getRand = arr => arr[Math.floor(Math.random() * arr.length)];
         const finalResponse = [
             getRand(sentencePool.emotion),
             getRand(sentencePool.environment),
@@ -91,15 +114,12 @@ function startCommunication() {
             getRand(sentencePool.philosophical)
         ].join('\n\n');
 
-        // 更新 UI
         document.getElementById('responseText').innerText = finalResponse;
-        document.getElementById('randomFreq').innerText = (Math.random() * 800 + 100).toFixed(3);
+        document.getElementById('randomFreq').innerText = (Math.random() * 500 + 100).toFixed(2);
         
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('result').classList.remove('hidden');
-        document.getElementById('actionBtn').disabled = false;
-    }, 3500); // 增加一點點等待時間，更有神秘感
+        btn.disabled = false;
+        btn.innerText = "啟動量子糾纏連結";
+    }, 3000); 
 }
-
-// 頁面載入後初始化星空
-window.addEventListener('DOMContentLoaded', initCosmos);

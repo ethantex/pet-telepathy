@@ -9,44 +9,31 @@
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            overflow: hidden;
-            background-color: #050508; /* 極深宇宙底色 */
+            /* 使用你指定的那張太空照片作為背景 */
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), 
+                        url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center; 
+            background-attachment: fixed;
+            background-color: #050508;
         }
 
-        /* 畫布定位 */
-        #starCanvas {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-        }
-
-        /* 宇宙深處的星雲霧氣 */
-        .nebula {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 30% 20%, rgba(63, 0, 113, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 70% 80%, rgba(0, 70, 120, 0.15) 0%, transparent 40%);
-            z-index: -2;
-            filter: blur(50px);
-        }
-
-        /* 毛玻璃面板升級 */
+        /* 毛玻璃面板升級：增加透明度層次 */
         .glass-panel {
-            background: rgba(10, 10, 20, 0.6);
+            background: rgba(15, 15, 25, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
         }
 
         .neon-btn {
             background: linear-gradient(45deg, #ff00cc, #3333ff);
-            box-shadow: 0 0 20px rgba(255, 0, 204, 0.3);
+            box-shadow: 0 0 20px rgba(255, 0, 204, 0.4);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .neon-btn:hover:not(:disabled) {
-            box-shadow: 0 0 35px rgba(51, 51, 255, 0.6);
+            box-shadow: 0 0 35px rgba(51, 51, 255, 0.7);
             transform: scale(1.02) translateY(-2px);
         }
 
@@ -54,21 +41,18 @@
             max-width: 140px; max-height: 140px;
             border-radius: 50%; object-fit: cover;
             border: 2px solid #00ffff;
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
             display: none; margin: 0 auto 1.5rem auto;
         }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 text-gray-200 antialiased font-mono">
     
-    <canvas id="starCanvas"></canvas>
-    <div class="nebula"></div>
-    
-    <div class="glass-panel p-10 rounded-[2rem] max-w-lg w-full text-center relative overflow-hidden">
+    <div class="glass-panel p-10 rounded-[2.5rem] max-w-lg w-full text-center relative overflow-hidden">
         <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-purple-400 to-pink-300 mb-2 tracking-widest uppercase">
             AI PET TELEPATHY INTERFACE
         </h1>
-        <p class="text-[10px] text-cyan-300 opacity-60 mb-8 tracking-[0.2em]">AI寵物意識溝通器 v1.2 • 量子糾纏態調頻</p>
+        <p class="text-[10px] text-cyan-300 opacity-60 mb-8 tracking-[0.2em]">AI寵物意識溝通器 v1.3 • 量子糾纏態調頻</p>
 
         <div class="mb-6 relative z-10">
             <img id="photoPreview" src="" alt="寵物圖像預覽">
@@ -91,7 +75,7 @@
         
         <div id="result" class="hidden mt-8 p-6 bg-white/5 border border-white/10 rounded-2xl text-left relative z-10">
             <p class="font-bold text-cyan-300 mb-3 text-[10px] tracking-widest">[量子意識回饋]</p>
-            <p id="responseText" class="text-gray-100 text-sm leading-loose italic"></p>
+            <p id="responseText" class="text-gray-100 text-sm leading-loose italic whitespace-pre-line"></p>
             <div class="mt-4 flex justify-between items-center opacity-30 text-[9px]">
                 <span>連結完整度: 98.42%</span>
                 <span>共振頻率: <span id="randomFreq"></span> PHz</span>

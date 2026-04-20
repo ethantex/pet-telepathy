@@ -45,50 +45,6 @@ const sentencePool = {
     ]
 };
 
-/// --- 極致星空 Canvas 引擎 ---
-const canvas = document.getElementById('starCanvas');
-const ctx = canvas.getContext('2d');
-let stars = [];
-
-function initStarfield() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    stars = [];
-    // 產生 400 顆隨機星星
-    for (let i = 0; i < 400; i++) {
-        stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 1.5,
-            opacity: Math.random(),
-            speed: Math.random() * 0.05 // 極慢的移動感
-        });
-    }
-}
-
-function animateStars() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    stars.forEach(star => {
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fill();
-
-        // 緩慢移動與閃爍
-        star.y -= star.speed;
-        if (star.y < 0) star.y = canvas.height;
-        star.opacity += (Math.random() - 0.5) * 0.02;
-        if (star.opacity < 0.1) star.opacity = 0.1;
-        if (star.opacity > 1) star.opacity = 1;
-    });
-    requestAnimationFrame(animateStars);
-}
-
-// 初始化畫布
-window.addEventListener('resize', initStarfield);
-initStarfield();
-animateStars();
-
 // --- 溝通邏輯 ---
 function startCommunication() {
     const photo = document.getElementById('photoInput').files[0];

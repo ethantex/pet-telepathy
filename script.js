@@ -1,4 +1,4 @@
-// 將話術分類，可以讓組合出來的內容更具備邏輯感
+// 話術資料庫
 const sentencePool = {
     emotion: [
         "他其實比外表看起來更在意你的情緒，有時候你難過，他雖然沒靠近，但心裡是在陪你的。",
@@ -45,33 +45,61 @@ const sentencePool = {
     ]
 };
 
+// --- 星空隨機產生器 ---
+function initCosmos() {
+    const starsContainer = document.querySelector('.stars');
+    const starCount = 300; // 產生 300 顆星星
+    let shadowCSS = "";
+
+    for (let i = 0; i < starCount; i++) {
+        const x = Math.floor(Math.random() * 100);
+        const y = Math.floor(Math.random() * 100);
+        const opacity = (Math.random() * 0.8 + 0.2).toFixed(2);
+        const size = (Math.random() * 1.5).toFixed(1); // 隨機大小感
+
+        shadowCSS += `${x}vw ${y}vh ${size}px rgba(255, 255, 255, ${opacity})`;
+        if (i < starCount - 1) shadowCSS += ", ";
+    }
+
+    starsContainer.style.boxShadow = shadowCSS;
+}
+
+// 啟動通訊邏輯
 function startCommunication() {
     const photo = document.getElementById('photoInput').files[0];
     const question = document.getElementById('questionInput').value;
 
-    if (!photo || !question) {
+    if (!photo || !question.trim()) {
         alert("請先上傳寵物圖像並輸入問題，才可進行量子糾纏連結！");
         return;
     }
 
+    // 進入載入狀態
     document.getElementById('actionBtn').disabled = true;
     document.getElementById('result').classList.add('hidden');
     document.getElementById('loading').classList.remove('hidden');
 
+    // 模擬 AI 運算與量子調頻
     setTimeout(() => {
-        // 從四個分類中各隨機抽一句，組成一段話
         const getRand = (arr) => arr[Math.floor(Math.random() * arr.length)];
         
+        // 組合內容並加上換行，增加閱讀質感
         const finalResponse = [
             getRand(sentencePool.emotion),
             getRand(sentencePool.environment),
             getRand(sentencePool.desire),
             getRand(sentencePool.philosophical)
-        ].join(' ');
+        ].join('\n\n');
 
+        // 更新 UI
         document.getElementById('responseText').innerText = finalResponse;
+        document.getElementById('randomFreq').innerText = (Math.random() * 800 + 100).toFixed(3);
+        
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('result').classList.remove('hidden');
         document.getElementById('actionBtn').disabled = false;
-    }, 2500); 
+    }, 3500); // 增加一點點等待時間，更有神秘感
 }
+
+// 頁面載入後初始化星空
+window.addEventListener('DOMContentLoaded', initCosmos);

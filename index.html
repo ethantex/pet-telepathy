@@ -6,47 +6,71 @@
     <title>AI寵物意識溝通器</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 客製化酷炫背景與動效 */
+        /* 深邃宇宙底色 */
         body {
-            background: radial-gradient(circle at center, #1a1a2e 0%, #020207 100%);
+            background: #020207;
             overflow-x: hidden;
+            margin: 0;
         }
-        /* 星空背景微動效 */
+
+        /* 宇宙星雲感：利用兩個巨大的漸層營造色彩深度 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(123, 31, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(33, 150, 243, 0.15) 0%, transparent 50%);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* 星空容器：透過 JS 注入 box-shadow */
         .stars {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(white 1px, transparent 1px);
-            background-size: 50px 50px;
-            opacity: 0.3; animation: starMove 100s linear infinite;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 1.5px;
+            height: 1.5px;
+            background: transparent;
             z-index: -1;
+            opacity: 0.8;
         }
-        @keyframes starMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
-        
+
         /* 毛玻璃效果與霓虹外框 */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(123, 31, 162, 0.3);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
         }
+
         /* 霓虹按鈕 */
         .neon-btn {
             background: linear-gradient(45deg, #ff00cc, #3333ff);
-            box-shadow: 0 0 15px rgba(255, 0, 204, 0.5);
-            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 0, 204, 0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .neon-btn:hover:not(:disabled) {
-            box-shadow: 0 0 25px rgba(51, 51, 255, 0.8);
-            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(51, 51, 255, 0.7);
+            transform: scale(1.03);
         }
         .neon-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
+
         /* 圖片預覽框 */
         #photoPreview {
-            max-width: 150px; max-height: 150px;
-            border-radius: 50%; object-fit: cover;
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
             border: 2px solid #00ffff;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-            display: none; margin: 0 auto 1rem auto;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            display: none;
+            margin: 0 auto 1.5rem auto;
         }
     </style>
 </head>
@@ -54,13 +78,13 @@
     <div class="stars"></div>
     
     <div class="glass-panel p-8 rounded-3xl max-w-lg w-full text-center relative overflow-hidden">
-        <div class="absolute -top-10 -left-10 w-32 h-32 bg-purple-500 rounded-full blur-[50px] opacity-30"></div>
-        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-500 rounded-full blur-[50px] opacity-30"></div>
+        <div class="absolute -top-10 -left-10 w-40 h-40 bg-purple-600 rounded-full blur-[80px] opacity-20"></div>
+        <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-600 rounded-full blur-[80px] opacity-20"></div>
 
         <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-purple-400 to-pink-300 mb-2 tracking-widest">
             AI Pet Telepathy Interface
         </h1>
-        <p class="text-xs text-cyan-200 opacity-80 mb-8 tracking-wider">AI寵物意識溝通器 v1.0 • 量子糾纏態調頻</p>
+        <p class="text-xs text-cyan-200 opacity-80 mb-8 tracking-wider">AI寵物意識溝通器 v1.1 • 量子糾纏態調頻</p>
 
         <div class="mb-6 relative z-10">
             <img id="photoPreview" src="" alt="寵物圖像預覽">
@@ -81,13 +105,12 @@
             [系統訊息] 正在演算量子糾纏態，透過AI大數據調頻中...
         </div>
         
-        <div id="result" class="hidden mt-10 p-6 bg-black/30 border border-cyan-800 rounded-2xl text-left relative z-10">
-            <div class="absolute inset-0 bg-cyan-950/20 rounded-2xl blur-sm"></div>
+        <div id="result" class="hidden mt-10 p-6 bg-black/40 border border-cyan-900/50 rounded-2xl text-left relative z-10">
             <div class="relative">
                 <p class="font-bold text-cyan-200 mb-3 tracking-wider text-sm">[量子意識回饋]</p>
-                <p id="responseText" class="text-gray-100 leading-relaxed text-sm"></p>
-                <div class="mt-4 text-center">
-                    <span class="text-[10px] text-gray-600">共振頻率：<span id="randomFreq"></span> PHz</span>
+                <p id="responseText" class="text-gray-100 leading-relaxed text-sm whitespace-pre-line"></p>
+                <div class="mt-4 text-center border-t border-gray-800 pt-3">
+                    <span class="text-[10px] text-gray-500 font-mono italic">共振頻率：<span id="randomFreq" class="text-cyan-600"></span> PHz</span>
                 </div>
             </div>
         </div>
@@ -97,7 +120,6 @@
 
     <script src="script.js"></script>
     <script>
-        // 圖片預覽功能
         function previewImage(input) {
             const preview = document.getElementById('photoPreview');
             if (input.files && input.files[0]) {
